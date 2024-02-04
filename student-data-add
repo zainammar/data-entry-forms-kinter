@@ -1,0 +1,81 @@
+import tkinter as tk
+from tkinter import filedialog
+from PIL import Image, ImageTk
+
+class FormApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Form Application")
+
+        # Form fields
+        self.label_idd = tk.Label(root, text="id:")
+        self.label_name = tk.Label(root, text="Name:")
+        self.label_fname = tk.Label(root, text="fName:")
+        self.label_class = tk.Label(root, text="Class:")
+        self.label_section = tk.Label(root, text="Section:")
+        
+        self.entry_idd = tk.Entry(root)
+        self.entry_name = tk.Entry(root)
+        self.entry_fname = tk.Entry(root)
+        self.entry_class = tk.Entry(root)
+        self.entry_section = tk.Entry(root)
+
+        # Image upload
+        self.image_path = tk.StringVar()
+        self.label_image = tk.Label(root, text="Image:")
+        self.button_upload_image = tk.Button(root, text="Upload Image", command=self.upload_image)
+
+        # Submit button
+        self.button_submit = tk.Button(root, text="Submit", command=self.submit_form)
+
+        # Grid layout
+        self.label_idd.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+        self.entry_idd.grid(row=0, column=1, padx=10, pady=10)
+        
+        self.label_name.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+        self.entry_name.grid(row=1, column=1, padx=10, pady=10)
+        
+        self.label_fname.grid(row=2, column=0, padx=10, pady=10, sticky="e")
+        self.entry_fname.grid(row=2, column=1, padx=10, pady=10)
+
+        self.label_class.grid(row=3, column=0, padx=10, pady=10, sticky="e")
+        self.entry_class.grid(row=3, column=1, padx=10, pady=10)
+
+        self.label_section.grid(row=4, column=0, padx=10, pady=10, sticky="e")
+        self.entry_section.grid(row=4, column=1, padx=10, pady=10)
+
+        self.label_image.grid(row=5, column=0, padx=10, pady=10, sticky="e")
+        self.button_upload_image.grid(row=5, column=1, padx=10, pady=10)
+
+        self.button_submit.grid(row=6, column=0, columnspan=2, pady=40)
+
+    def upload_image(self):
+        file_path = filedialog.askopenfilename(title="Select Image", filetypes=[("Image files", "*.png;*.jpg;*.jpeg")])
+        if file_path:
+            self.image_path.set(file_path)
+            self.display_image(file_path)
+
+    def display_image(self, file_path):
+        image = Image.open(file_path)
+        image = image.resize((100, 100), Image.ANTIALIAS)
+        photo = ImageTk.PhotoImage(image)
+
+        label_image_preview = tk.Label(self.root, image=photo)
+        label_image_preview.image = photo
+        label_image_preview.grid(row=7, column=0, columnspan=2, pady=10)
+
+    def submit_form(self):
+        idd = self.entry_idd.get()
+        name = self.entry_name.get()
+        fname = self.entry_fname.get()
+        class_ = self.entry_class.get()
+        section = self.entry_section.get()
+        image_path = self.image_path.get()
+
+        # You can add logic to process the form data (e.g., saving to a database)
+        print(f"id: {idd},Name: {name}, fName: {fname}, Class: {class_}, Section: {section}, Image Path: {image_path}")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = FormApp(root)
+    root.mainloop()
